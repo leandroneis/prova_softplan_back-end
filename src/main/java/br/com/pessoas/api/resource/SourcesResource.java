@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SourcesResource {
 	
-	private String urlCodigoFonteBackend = "https://github.com/leandroneis/pessoas-api";
-	private String urlCodigoFonteFrontend = "https://github.com/leandroneis/pessoas-ui";
+	private String urlCodigoFonteBackend = "https://github.com/leandroneis/prova_softplan_back-end";
+	private String urlCodigoFonteFrontend = "https://github.com/leandroneis/prova_softplan_front-end";
+
 
 	@ApiOperation("Mostra o link do código fonte no repositório")
 	@GetMapping("/source")
