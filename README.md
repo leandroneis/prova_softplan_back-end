@@ -14,8 +14,17 @@ Se desejar altere os valores no arquivo src/main/resources/db/migration/V02__cri
 
 Necessário ter banco de dados Mysql com o usuário root e senha root configurados.
 
-PS: Na imagem docker já está configurado.
-
+## Token
+Estou utilizando autenticação Oauth2. Para gerar o token utilizar o comando abaixo.
+```
+curl --location --request POST 'http://localhost:8080/oauth/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Authorization: Basic YW5ndWxhcjpAbmd1bEByMA==' \
+--data-urlencode 'client=angular' \
+--data-urlencode 'username=admin@softplan.com.br' \
+--data-urlencode 'password=admin' \
+--data-urlencode 'grant_type=password'
+``` 
 
 O Projeto foi desenvolvido seguindo as obrigações abaixo citadas:
 ## A demanda
@@ -44,13 +53,28 @@ Substitui por autenticação OAuth.
 ### Código fonte
 A aplicação deverá possuir um endpoint **/source** acessível sem autenticação via **HTTP GET** que deverá retornar o link do projeto no github com o código fonte do projeto desenvolvido.
 
+https://github.com/leandroneis/prova_softplan_back-end
+https://github.com/leandroneis/prova_softplan_front-end
+
+
 ## Docker
 A aplicação deverá estar disponível em uma imagem docker a partir do **docker-hub** e não deve exigir configurações/parâmetros. Ou seja, ao rodar a imagem, deve levantar a aplicação e funcionar.
 
+	- https://hub.docker.com/repository/docker/lgn200/prova_softplan_leandro_neis_pessoa_api
+	- https://hub.docker.com/repository/docker/lgn200/prova_softplan_leandro_neis_pessoa_ui
+
+Se desejar criar um container docker com o projeto fazer as seguintes alterações:
+ - No arquivo application.properties alterar no spring.datasource.url alterar de localhost para db
+ - No linux executar o comando mvn clean install && sudo docker-compose up --build --force-recreate -d
+
+ 
 ## Swagger
 A API deverá conter documentação executável que poderá ser utilizada durante seu desenvolvimento. (Utilizar swagger).
 A aplicação possuí documentação swagger. Ps: Não consegui fazer funcinar o token no swagger, assim não é possível utilizar o token para testar.
 
+
+## Heroku
+ - https://leandroneis-pessoa-ui.herokuapp.com/
 
 
 ## Será incluso ainda....
