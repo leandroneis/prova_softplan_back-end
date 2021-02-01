@@ -4,7 +4,7 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
-    image: spring_boot_com_mysql/api
+    image: prova_softplan_leandro_neis_pessoa_api
     ports:
       - '8080:8080'
       - '5005:5005'
