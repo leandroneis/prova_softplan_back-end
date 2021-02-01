@@ -9,7 +9,7 @@ ENV ADDITIONAL_OPTS=${ADDITIONAL_OPTS}
 
 WORKDIR /opt/spring_boot
 
-COPY /target/pessoas-api-1.0.0-SNAPSHOT.jar pessoas-api.jar
+COPY /target/pessoas-api*.jar pessoas-api.jar
 
 SHELL ["/bin/sh","-c"]
 
