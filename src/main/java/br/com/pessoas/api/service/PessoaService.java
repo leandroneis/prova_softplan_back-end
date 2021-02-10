@@ -1,8 +1,6 @@
 package br.com.pessoas.api.service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,58 +13,51 @@ import br.com.pessoas.api.service.exception.PessoaCpfExistenteException;
 @Service
 public class PessoaService {
 
-	@Autowired
-	private PessoaRepository pessoaRepository;
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
-	public Pessoa salvar(Pessoa pessoa) {
-		if (verificaDuplicidadeCpfAoSalvar(pessoa)) {
-			throw new PessoaCpfExistenteException();
-		} else {
-			return pessoaRepository.save(pessoa);
-		}
-	}
+    public Pessoa salvar(Pessoa pessoa) {
+        if (verificaDuplicidadeCpf(pessoa.getCodigo(),pessoa)) {
+            throw new PessoaCpfExistenteException();
+        } else {
+            return pessoaRepository.save(pessoa);
+        }
+    }
 
-	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
-		Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
-		LocalDateTime agora = LocalDateTime.now();
-		pessoa.setDataDaAlteracao(agora);
-		if (verificaDuplicidadeCpfAoAtualizar(pessoaSalva.getCodigo(), pessoa)) {
-			throw new PessoaCpfExistenteException();
-		} else {
-			BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
-			return pessoaRepository.save(pessoaSalva);
-		}
-	}
+    public Pessoa atualizar(Long codigo, Pessoa pessoa) {
+        Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
+        if (verificaDuplicidadeCpf(pessoaSalva.getCodigo(), pessoa)) {
+            throw new PessoaCpfExistenteException();
+        } else {
+            BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
+            return pessoaRepository.save(pessoaSalva);
+        }
+    }
 
-	private Boolean verificaDuplicidadeCpfAoAtualizar(Long codigo, Pessoa pessoa) {
-		Pessoa pessoaCpf = buscaPessoaPorCpf(pessoa);
-		if (pessoaCpf != null && !pessoaCpf.getCodigo().equals(codigo)) {
-			return true;
-		}
-		return false;
-	}
+    private boolean verificaDuplicidadeCpf(Long codigo, Pessoa pessoa) {
+        if (pessoa != null) {
+            Pessoa pessoaCpf = buscaPessoaPorCpf(pessoa);
+            if (pessoaCpf != null) {
+                if (pessoaCpf.getCodigo().equals(codigo)) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private Boolean verificaDuplicidadeCpfAoSalvar(Pessoa pessoa) {
-		if (pessoa != null) {
-			Pessoa pessoaCpf = buscaPessoaPorCpf(pessoa);
 
-			if (pessoaCpf != null) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private Pessoa buscaPessoaPorCpf(Pessoa pessoa) {
+        return pessoaRepository.findByCpf(pessoa.getCpf());
+    }
 
-	private Pessoa buscaPessoaPorCpf(Pessoa pessoa) {
-		return pessoaRepository.findByCpf(pessoa.getCpf());
-	}
-
-	public Pessoa buscarPessoaPeloCodigo(Long codigo) {
-		Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo);
-		if (!pessoaSalva.isPresent()) {
-			throw new EmptyResultDataAccessException(1);
-		}
-		return pessoaSalva.get();
-	}
+    public Pessoa buscarPessoaPeloCodigo(Long codigo) {
+        Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo);
+        if (!pessoaSalva.isPresent()) {
+            throw new EmptyResultDataAccessException(1);
+        }
+        return pessoaSalva.get();
+    }
 
 }
