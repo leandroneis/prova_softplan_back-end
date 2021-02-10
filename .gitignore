@@ -43,3 +43,4 @@ atlassian-ide-plugin.xml
 .gradletasknamecache
 docker
 /docker/*
+/.factorypath
