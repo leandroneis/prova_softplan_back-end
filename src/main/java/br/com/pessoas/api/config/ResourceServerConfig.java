@@ -23,16 +23,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         "/swagger-resources/**",
                         "/swagger-ui.html",
                         "/webjars/**" ,
-                        /*Probably not needed*/ "/swagger.json")
+                        "/swagger.json")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
+                .formLogin().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf()
-                .disable();
+                .csrf().disable();
     }
 
     @Override
