@@ -1,6 +1,7 @@
 package br.com.pessoas.api.service;
 
 import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,7 +18,7 @@ public class PessoaService {
     private PessoaRepository pessoaRepository;
 
     public Pessoa salvar(Pessoa pessoa) {
-        if (verificaDuplicidadeCpf(pessoa.getCodigo(),pessoa)) {
+        if (verificaDuplicidadeCpf(pessoa.getCodigo(), pessoa)) {
             throw new PessoaCpfExistenteException();
         } else {
             return pessoaRepository.save(pessoa);
@@ -35,16 +36,17 @@ public class PessoaService {
     }
 
     private boolean verificaDuplicidadeCpf(Long codigo, Pessoa pessoa) {
-        if (pessoa != null) {
-            Pessoa pessoaCpf = buscaPessoaPorCpf(pessoa);
-            if (pessoaCpf != null) {
-                if (pessoaCpf.getCodigo().equals(codigo)) {
-                    return false;
-                }
-                return true;
-            }
+        if (pessoa == null) {
+            return false;
         }
-        return false;
+        Pessoa pessoaCpf = buscaPessoaPorCpf(pessoa);
+        if (pessoaCpf == null) {
+            return false;
+        }
+        if (pessoaCpf.getCodigo().equals(codigo)) {
+            return false;
+        }
+        return true;
     }
 
 
